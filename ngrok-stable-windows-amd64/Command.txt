@@ -1,0 +1,5 @@
+ngrok http 127.0.0.1:6969
+
+ngrok http 127.0.0.1:6969 "file:///C:\Users\ThinkBox\Documents\twitchChatBot\index.html"
+
+ngrok http "file:///C:\Users\ThinkBox\Documents\twitchChatBot"

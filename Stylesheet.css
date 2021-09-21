@@ -1,0 +1,52 @@
+.scroll-left {
+    overflow: hidden;
+    padding-bottom: 25%;
+
+    }
+
+
+p:empty {
+    display:none;
+}
+
+    .scroll-left p{
+        
+    position: absolute;
+    width: 100%;
+    min-height: 25%;
+    max-height: 50%;
+    margin: 0;
+    line-height: 50px;
+    text-align: left;
+    /* Starting position */
+    -moz-transform:translateY(1000%);
+    -webkit-transform:translateY(1000%); 
+    transform:translateY(1000%);
+    /* Apply animation to this element */ 
+    -moz-animation: scroll-left 25s linear infinite;
+    -webkit-animation: scroll-left 25s linear infinite;
+    animation: scroll-left 25s linear infinite;
+    }
+    /* Move it (define the animation) */
+    @-moz-keyframes scroll-left {
+    0% { -moz-transform: translateY(1000%); }
+    100% { -moz-transform: translateY(-1000%); }
+    }
+    @-webkit-keyframes scroll-left {
+    0% { -webkit-transform: translateY(1000%); }
+    100% { -webkit-transform: translateY(-1000%); }
+    }
+    @keyframes scroll-left {
+    0% { 
+    -moz-transform: translateY(1000%); /* Browser bug fix */
+    -webkit-transform: translateY(1000%); /* Browser bug fix */
+    transform: translateY(1000%); 
+    }
+    100% { 
+    -moz-transform: translateY(-1000%); /* Browser bug fix */
+    -webkit-transform: translateY(-1000%); /* Browser bug fix */
+    transform: translateY(-1000%); 
+    }
+    }
+
+    

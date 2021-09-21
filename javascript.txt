@@ -1,0 +1,150 @@
+
+
+// Require the TwitchJS library.
+//https://id.twitch.tv/oauth2/authorize?client_id=kskak0xgrjt64xxd5c62m5wl77jd6u&redirect_uri=http://localhost&response_type=code&scope=chat:read+chat:edit
+// https://api.twitch.tv/kraken/users/?login=thewrightdude&client_id=CLIENT_ID_HERE&a
+const TwitchClient = require('twitch').default;
+const ChatClient = require('twitch-chat-client').default;
+const WebHookListener = require('twitch-webhooks').default;
+var request = require('request');
+var cheerio = require('cheerio');
+const fs = require('fs-extra');
+
+
+
+var subTimer = time;
+var subTimeout = 5000;
+
+(async() => {
+
+const dataobj = JSON.parse(await fs.readFile('./data.json'));
+
+const user = dataobj.user;
+const password = dataobj.password;
+const channel = dataobj.channel;
+const access_token = dataobj.access_token;
+const refresh_token = dataobj.refresh_token;
+const client_id = dataobj.client_id;
+const client_secret = dataobj.client_secret;
+const userID = '131980451';
+
+//Twitch viewers test
+var viewerDiv = document.getElementById("<ID_OF_THE_DIV>");
+var content = document.createTextNode("<YOUR_CONTENT>");
+theDiv.appendChild(content);
+
+const twitchClient = TwitchClient.withCredentials(client_id, access_token, undefined, {
+	client_secret,
+	refresh_token
+});
+
+
+const chatClient = await ChatClient.forTwitchClient(twitchClient, { channels: ['thewrightdude']});
+await chatClient.connect();
+
+chatClient.reques
+
+chatClient.say(channel, 'TheWrightBot is ready!');
+
+
+chatClient.onSub((channel, user) => {
+	chatClient.say(channel, `Wow ur a real bro @${user} thank you for subbing!`);
+});
+
+
+chatClient.onRaid((channel, user, raidInfo, msg) => {
+
+	chatClient.say(channel, `Everyone get down! @${raidInfo.displayName} has breached 
+	with @${raidInfo.viewerCount} friends!`);
+
+	if(raidInfo.viewerCount >= 5)
+	{
+	chatClient.addVIP(channel,raidInfo.displayName);
+	}
+});
+
+
+
+chatClient.onPrivmsg((channel, user, message) => {
+
+	  if (message === '!help' || message === '!discord') {
+        chatClient.say(channel, 'Available commands are: !dice, !corona, !roblox, !game, !discord');
+	} 
+	else if(message === '!corona') {
+
+		request(
+			{ uri: "https://www.worldometers.info/coronavirus/" },
+			function(error, response, body) {
+				$ = cheerio.load(body);
+				
+				var corona = $('div.maincounter-number')
+				.children()
+				.first()
+				.html();
+
+				chatClient.say(channel, `There are currently: ${corona} cases of coronavirus in the world!`);
+			}
+		);
+		
+	}
+	else if (message === '!dice') {
+		const diceRoll = Math.floor(Math.random() * 6) + 1;
+        chatClient.say(channel, `@${user} rolled a ${diceRoll}`)
+
+	}
+	else if (message === '!roblox') {
+		chatClient.say(channel, `https://www.roblox.com/users/790056/profile`);
+	}
+	else if (message === '!game') {
+		chatClient.say(channel, `https://www.roblox.com/games/2772610559/Farming-and-Friends`);
+	}
+	else if (message === '!discord') {
+		chatClient.say(channel, `https://discord.gg/ZND8t98`);
+	}
+ 
+
+
+
+
+});
+
+
+const listener = await WebHookListener.create(twitchClient, {
+    hostName: '7c3a62a1.ngrok.io',
+    port: 6969,
+    reverseProxy: { port: 443, ssl: true }
+})
+
+listener.listen();
+
+
+const subscription = await listener.subscribeToStreamChanges(userID, async (stream) => {
+    if (stream) {
+		chatClient.say(channel,`${stream.userDisplayName} just went live with title: ${stream.title}`);
+
+    } else {
+        // no stream, no display name
+        const user = await twitchClient.helix.users.getUserById(userID);
+        chatClient.say(channel,`${user.displayName} just went offline`);
+    }
+});
+
+
+
+const newFollower = await listener.subscribeToFollowsToUser(userID, async(stream) => {
+	chatClient.say(channel, ` ${(await stream.getFollowedUser()).displayName} just followed, and it's an honor!`);
+
+	subTimer = Date.now() + subTimeout;
+
+	if(subTimer >= Date.now())
+	{
+	// Call  function newFollower(stream.getFollowedUser()).displayName); 
+	}
+	else
+	{
+		// Call  function newFollowerTimeOut();
+	}
+
+})
+
+})();
